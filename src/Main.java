@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -79,6 +82,11 @@ public class Main {
                         System.out.println("Неверный выбор. Возврат в главное меню.");
                     }
                     break;
+                case "7":
+                    System.out.println("Введите имя файла для сохранения (например, history.txt): ");
+                    String filename = scanner.nextLine();
+                    saveTransactionsToFile(transactions, filename);
+                    break;
                 case "0":
                     running = false;
                     System.out.println("До свидания!");
@@ -91,6 +99,23 @@ public class Main {
         scanner.close();
     }
 
+    private static void saveTransactionsToFile(List<Transaction> transactions, String filename){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+
+            if (transactions.isEmpty()) {
+                System.out.println("История транзакций пуста.\n");
+            } else {
+                for (Transaction t : transactions) {
+                    writer.write(t.toString());
+                    writer.newLine();
+                }
+            }
+            System.out.println("История операций сохранена в файл: " + filename);
+        } catch (IOException e) {
+            System.out.println("Ошибка при записи в файл: " + e.getMessage());
+        }
+    }
+
     private static void printMenu() {
         System.out.println("\n==== Budget Manager ====");
         System.out.println("1. Добавить доход");
@@ -99,6 +124,7 @@ public class Main {
         System.out.println("4. Сбросить баланс");
         System.out.println("5. Показать историю операций");
         System.out.println("6. Фильтровать историю (доходы/расходы)");
+        System.out.println("7. Сохранить историю в файл");
         System.out.println("0. Выйти");
         System.out.print("Выберите действие: ");
     }
