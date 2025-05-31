@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -83,9 +84,14 @@ public class Main {
                     }
                     break;
                 case "7":
-                    System.out.println("Введите имя файла для сохранения (например, history.txt): ");
+                    System.out.println("Введите имя файла для сохранения (например, transaction history.txt): ");
                     String filename = scanner.nextLine();
-                    saveTransactionsToFile(transactions, filename);
+                    saveTransactionsToTXT(transactions, filename);
+                    break;
+                case "8":
+                    System.out.println("Введите имя файла для сохранения (например, transaction history.csv)");
+                    String filenameCSV = scanner.nextLine();
+                    saveTransactionToCSV(transactions, filenameCSV);
                     break;
                 case "0":
                     running = false;
@@ -99,7 +105,7 @@ public class Main {
         scanner.close();
     }
 
-    private static void saveTransactionsToFile(List<Transaction> transactions, String filename){
+    private static void saveTransactionsToTXT(List<Transaction> transactions, String filename){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
 
             if (transactions.isEmpty()) {
@@ -115,6 +121,24 @@ public class Main {
             System.out.println("Ошибка при записи в файл: " + e.getMessage());
         }
     }
+    private static void saveTransactionToCSV(List<Transaction> transactions, String filename){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))){
+
+            writer.write('\uFEFF');
+            writer.write("Тип,Сумма,Дата и время");
+            writer.newLine();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            for (Transaction t : transactions){
+                String line = String.format("%s,%.2f,%s",
+                        t.getType(), t.getAmount(), t.getDateTime().format(formatter));
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e){
+            System.out.println("Ошибка при записи в CSV: " + e.getMessage());
+        }
+    }
 
     private static void printMenu() {
         System.out.println("\n==== Budget Manager ====");
@@ -124,7 +148,8 @@ public class Main {
         System.out.println("4. Сбросить баланс");
         System.out.println("5. Показать историю операций");
         System.out.println("6. Фильтровать историю (доходы/расходы)");
-        System.out.println("7. Сохранить историю в файл");
+        System.out.println("7. Сохранить историю в файл txt");
+        System.out.println("8. Сохранить историю в файл csv");
         System.out.println("0. Выйти");
         System.out.print("Выберите действие: ");
     }
