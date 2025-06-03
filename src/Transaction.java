@@ -1,12 +1,14 @@
+import main.java.com.alina.domain.TransactionType;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     private double amount;
-    private String type;
+    private TransactionType type;
     private LocalDateTime dateTime;
 
-    public Transaction(double amount, String type){
+    public Transaction(double amount, TransactionType type){
         this.amount = amount;
         this.type = type;
         this.dateTime = LocalDateTime.now();
@@ -16,7 +18,7 @@ public class Transaction {
         return amount;
     }
 
-    public String getType() {
+    public TransactionType getType() {
         return type;
     }
 

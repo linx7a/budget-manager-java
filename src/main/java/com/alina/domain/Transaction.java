@@ -1,3 +1,5 @@
+package main.java.com.alina.domain;
+
 import main.java.com.alina.domain.TransactionType;
 
 import java.io.BufferedWriter;
@@ -76,11 +78,11 @@ public class Main {
                         }
                     } else if (filterChoice.equals("2")) {
                         System.out.println("Расходы: ");
-                            for (Transaction t : transactions) {
-                                if (t.getType() == TransactionType.РАСХОД) {
-                                    System.out.println(t);
-                                }
+                        for (Transaction t : transactions) {
+                            if (t.getType() == TransactionType.РАСХОД) {
+                                System.out.println(t);
                             }
+                        }
                     } else {
                         System.out.println("Неверный выбор. Возврат в главное меню.");
                     }
