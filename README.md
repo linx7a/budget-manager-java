@@ -26,8 +26,8 @@ It allows users to track income and expenses, view balance, and filter transacti
 
 3. Compile and run the app:
    ```bash
-   javac src/Main.java src/Transaction.java
-   java -cp src Main
+   javac src/main.java.com.alina.application.Main.java src/Transaction.java
+   java -cp src main.java.com.alina.application.Main
    ```
 
 ## Technologies

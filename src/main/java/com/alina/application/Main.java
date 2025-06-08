@@ -1,4 +1,8 @@
-import main.java.com.alina.domain.TransactionType;
+package com.alina.application;
+
+import com.alina.domain.Transaction;
+import com.alina.domain.TransactionType;
+import com.alina.domain.Budget;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -28,7 +32,7 @@ public class Main {
                     try {
                         double income = Double.parseDouble(input);
                         balance += income;
-                        transactions.add(new Transaction(income, TransactionType.ДОХОД));
+                        transactions.add(new Transaction(income, TransactionType.INCOME));
                         System.out.println("Доход добавлен");
                     } catch (NumberFormatException e){
                         System.out.println("Ошибка: введите корректное число.\n");
@@ -40,7 +44,7 @@ public class Main {
                     try {
                         double expense = Double.parseDouble(input2);
                         balance -= expense;
-                        transactions.add(new Transaction(expense,TransactionType.РАСХОД));
+                        transactions.add(new Transaction(expense,TransactionType.EXPENSE));
                         System.out.println("Расход добавлен");
                     } catch (NumberFormatException e){
                         System.out.println("Ошибка: введите корректное число.\n");
@@ -71,13 +75,13 @@ public class Main {
                     if (filterChoice.equals("1")) {
                         System.out.println("Доходы: ");
                         for (Transaction t : transactions) {
-                            if (t.getType() == TransactionType.ДОХОД)
+                            if (t.getType() == TransactionType.INCOME)
                                 System.out.println(t);
                         }
                     } else if (filterChoice.equals("2")) {
                         System.out.println("Расходы: ");
                             for (Transaction t : transactions) {
-                                if (t.getType() == TransactionType.РАСХОД) {
+                                if (t.getType() == TransactionType.EXPENSE) {
                                     System.out.println(t);
                                 }
                             }
