@@ -1,25 +1,41 @@
 package com.alina.budgetmanager.application;
 
+import com.alina.budgetmanager.db.DatabaseManager;
 import com.alina.budgetmanager.domain.Transaction;
 import com.alina.budgetmanager.domain.TransactionType;
 import com.alina.budgetmanager.domain.Budget;
+import static com.alina.budgetmanager.db.DatabaseManager.getConnection;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.*;
+
+
+
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Budget budget = new Budget();
-        boolean running = true;
         double balance = 0.0;
 
-//        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> pastTransactions = DatabaseManager.getAllTransactions();
+        for (Transaction t : pastTransactions) {
+            budget.addTransaction(t);
+            if (t.getType() == TransactionType.INCOME) {
+                balance += t.getAmount();
+            } else if (t.getType() == TransactionType.EXPENSE) {
+                balance -= t.getAmount();
+            }
+        }
 
+        boolean running = true;
         while (running) {
             printMenu();
             System.out.println("Выберите опцию: ");
@@ -31,7 +47,9 @@ public class Main {
                     String input = scanner.nextLine();
                     try {
                         double income = Double.parseDouble(input);
+                        Transaction incomeTransaction = new Transaction(income, TransactionType.INCOME);
                         budget.addTransaction(new Transaction(income, TransactionType.INCOME));
+                        DatabaseManager.insertTransaction(incomeTransaction);
                         System.out.println("Доход добавлен");
                     } catch (NumberFormatException e){
                         System.out.println("Ошибка: введите корректное число.\n");
@@ -43,7 +61,9 @@ public class Main {
                     try {
                         double expense = Double.parseDouble(input2);
                         balance -= expense;
+                        Transaction expenseTransaction = new Transaction(expense, TransactionType.EXPENSE);
                         budget.addTransaction(new Transaction(expense,TransactionType.EXPENSE));
+                        DatabaseManager.insertTransaction(expenseTransaction);
                         System.out.println("Расход добавлен");
                     } catch (NumberFormatException e){
                         System.out.println("Ошибка: введите корректное число.\n");
@@ -109,7 +129,6 @@ public class Main {
 
         scanner.close();
     }
-
     private static void saveTransactionsToTXT(List<Transaction> transactions, String filename){
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
 
@@ -156,6 +175,5 @@ public class Main {
         System.out.println("7. Сохранить историю в файл txt");
         System.out.println("8. Сохранить историю в файл csv");
         System.out.println("0. Выйти");
-        System.out.print("Выберите действие: ");
     }
 }
