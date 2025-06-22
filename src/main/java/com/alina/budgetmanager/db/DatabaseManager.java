@@ -58,11 +58,11 @@ public class DatabaseManager {
 
         String sql = "SELECT * FROM transactions";
 
-        Connection conn = null;
-        try {
-            conn = getConnection();
+        try (
+            Connection conn = getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
+            ) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 double amount = rs.getDouble("amount");
