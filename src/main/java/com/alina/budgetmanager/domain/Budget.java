@@ -18,6 +18,10 @@ public class Budget {
         transactions.remove(transaction);
     }
 
+    public void clear() {
+        transactions.clear();
+    }
+
     public List<Transaction> getTransactions() {
         return new ArrayList<>(transactions); // защищаем оригинальный список
     }
