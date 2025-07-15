@@ -65,11 +65,40 @@ public class MenuHandler {
             System.out.println("Сброс отменен.");
         }
     }
+    private void showTransactionsHistory() {
+      List<Transaction> transactions = budget.getTransactions();
 
- //   private void showTransactionsHistory() {
- //       List<Transaction> transactions = budget.getTransactions();
+      if (transactions.isEmpty()) {
+          System.out.println("История операций пуста");
+      } else {
+          System.out.println("История операций:");
+          transactions.forEach(System.out::println);
+      }
 
-//    }
+   }
+
+   private void handleFilter() {
+       System.out.println("Введите 1 для доходов, 2 для рассходов");
+       String choice = scanner.nextLine();
+
+       TransactionType type;
+
+       if (choice.equals("1")) {
+           type = TransactionType.INCOME;
+           System.out.println("Фильтр: доходы");
+       } else if (choice.equals("2")) {
+           type = TransactionType.EXPENSE;
+           System.out.println("Фильтр: расходы");
+       } else {
+           System.out.println("Неверный выбор.");
+           return;
+       }
+
+       budget.getTransactions().stream()
+               .filter(t -> t.getType() == type)
+               .forEach(System.out::println);
+
+   }
     private void printMenu() {
         System.out.println("\n==== Budget Manager ====");
         System.out.println("1. Добавить доход");
