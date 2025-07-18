@@ -99,6 +99,9 @@ public class MenuHandler {
                .forEach(System.out::println);
 
    }
+
+
+
     private void printMenu() {
         System.out.println("\n==== Budget Manager ====");
         System.out.println("1. Добавить доход");
